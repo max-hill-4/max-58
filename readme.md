@@ -1,6 +1,9 @@
-# Allium58
+# Max58
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
+
+WIP - photos soon :)!
+
 
 This is an exact copy of the Allium58 but with my GitHub printed on the silk screen. All credits go to beekeeb. Have a good day :)
 
