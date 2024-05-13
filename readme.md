@@ -2,6 +2,9 @@
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
 
+This is an exact copy of the Allium58 but with my GitHub printed on the silk screen. All credits go to beekeeb. Have a good day :)
+
+
 The Allium58 is an open source 6*4+4keys column-staggered split keyboard. It is based on [Lily58 Pro created by kata0510](https://github.com/kata0510/Lily58/tree/master/Pro). The Allium58 shares the same layout as the Lily58 Pro and also supports using the original Lily58 Pro firmware. However, several changes have been made to the board:
 
 - **Enhanced Wireless Capability:** The Allium58 is designed to be more suitable for wireless builds. It provides native support for utilizing power-saving nice!view or other memory-in-pixel displays. This allows for efficient power management and extended battery life.
