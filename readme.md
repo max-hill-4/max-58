@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
 
-WIP - photos soon :)!
+![keeber]([docs/banner.jpg](https://cdn.discordapp.com/attachments/491292035383558177/1239637704464142356/image.png?ex=6643a614&is=66425494&hm=119cd85e8ce4aba372fd2aaa2398917b556a0b9edee5ef918af8744726106a10&))
 
 
 This is an edited Allium58 with my GitHub printed on the silk screen. All credits go to beekeeb.
