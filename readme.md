@@ -5,11 +5,14 @@
 WIP - photos soon :)!
 
 
-This is an edited Allium58 with my GitHub printed on the silk screen. All credits go to beekeeb. Have a good day :)
+This is an edited Allium58 with my GitHub printed on the silk screen. All credits go to beekeeb.
 
-I did this using this [element14](https://community.element14.com/members-area/b/blog/posts/kicad-6---adding-logos-and-graphics-to-a-silkscreen) article.
+I used this [element14](https://community.element14.com/members-area/b/blog/posts/kicad-6---adding-logos-and-graphics-to-a-silkscreen) article to do this.
 
-Please find the original repo for more details.
+
+Please find the original repo for further details.
+
+Have a good day :)
 
 ## Credits
 
