@@ -1,7 +1,5 @@
 # Allium58
 
-![Allium58 GLP Keyboard](docs/banner.jpg)
-
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
 
 The Allium58 is an open source 6*4+4keys column-staggered split keyboard. It is based on [Lily58 Pro created by kata0510](https://github.com/kata0510/Lily58/tree/master/Pro). The Allium58 shares the same layout as the Lily58 Pro and also supports using the original Lily58 Pro firmware. However, several changes have been made to the board:
