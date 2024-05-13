@@ -21,9 +21,7 @@ The Allium58 is an open source 6*4+4keys column-staggered split keyboard. It is 
 
 ## Photos
 
-![Allium58 GLP Keyboard](docs/photo-1.jpg)
-![Allium58 GLP Keyboard](docs/photo-2.jpg)
-![Allium58 GLP Keyboard](docs/photo-3.jpg)
+photos soon :)
 
 ## Bill of Materials (BOM)
 
