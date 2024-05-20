@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
 
-[<img src="https://photos.app.goo.gl/vimsr1RGUt4MvTAH8"/>]
+[<img src="https://photos.app.goo.gl/vimsr1RGUt4MvTAH8" height=100 />]
 
 
 This is an edited Allium58 with my GitHub printed on the silk screen. All credits go to beekeeb.
