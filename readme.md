@@ -4,7 +4,6 @@
 
 <img src="docs/image.png" height=200 />
 <img src="docs/img1.JPG" height=400 />
-<img src="docs/img2.jpg" height=500 />
 <img src="docs/img3.jpg" height=400 />
 This is an edited Allium58 with my GitHub printed on the silk screen. All credits go to beekeeb.
 
