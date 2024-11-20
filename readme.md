@@ -9,7 +9,7 @@ This is an edited Allium58 with my GitHub printed on the silk screen. All credit
 
 I used this [element14](https://community.element14.com/members-area/b/blog/posts/kicad-6---adding-logos-and-graphics-to-a-silkscreen) article to do this.
 
-
+I used a two nrf52840's and nuphy aloe's.
 Please find the original repo for further details.
 
 Have a good day :)
