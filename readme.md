@@ -1,7 +1,7 @@
 # Max58
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
-<img src="docs/IMG_5770.jpg" height=200 />
+<img src="docs/IMG_5770.jpg" height=600 />
 <img src="docs/image.png" height=200 />
 <img src="docs/img1.JPG" height=400 />
 <img src="docs/img3.jpg" height=400 />
