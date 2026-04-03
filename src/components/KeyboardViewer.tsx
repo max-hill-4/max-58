@@ -32,7 +32,7 @@ export default function KeyboardViewer() {
 
   return (
     <div className="w-full h-[500px] md:h-[600px] relative">
-      <Canvas shadows camera={{ position: [0, 12, 16], fov: 35 }} className="bg-gradient-to-b from-zinc-900 to-zinc-950 rounded-xl">
+      <Canvas shadows camera={{ position: [0, 8, 12], fov: 45 }} className="bg-gradient-to-b from-zinc-900 to-zinc-950 rounded-xl">
         <Suspense fallback={null}>
           <Scene exploded={exploded} />
         </Suspense>
