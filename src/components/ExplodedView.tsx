@@ -1,31 +1,47 @@
 "use client";
 
 import { useGLTF } from "@react-three/drei";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import * as THREE from "three";
 
 export default function ExplodedKeyboard({ exploded }: { exploded: boolean }) {
   useGLTF.preload("/models/keyboard-assembly.glb");
-  
   const gltf = useGLTF("/models/keyboard-assembly.glb");
+  const originalPositions = useRef<Map<string, THREE.Vector3>>(new Map());
   
   useEffect(() => {
-    if (gltf?.scene) {
+    if (gltf?.scene && originalPositions.current.size === 0) {
       console.log("=== GLB Loaded Successfully ===");
       console.log("Scene children:", gltf.scene.children.length);
+      
       gltf.scene.traverse((obj: any) => {
-        console.log(`Object: ${obj.name} (${obj.type})`, {
-          pos: [obj.position.x.toFixed(3), obj.position.y.toFixed(3), obj.position.z.toFixed(3)]
-        });
+        if (obj.type === "Mesh" || obj.type === "Group") {
+          originalPositions.current.set(obj.name, obj.position.clone());
+        }
       });
     }
   }, [gltf]);
   
-  if (!gltf?.scene) {
-    console.log("Still loading...");
-    return null;
-  }
+  useEffect(() => {
+    if (!gltf?.scene) return;
+    
+    const explodeDistance = 15;
+    
+    gltf.scene.traverse((obj: any) => {
+      if (obj.type === "Mesh" || obj.type === "Group") {
+        const origPos = originalPositions.current.get(obj.name);
+        if (!origPos) return;
+        
+        if (obj.name.toLowerCase().includes("switch")) {
+          obj.position.y = origPos.y + (exploded ? explodeDistance : 0);
+        } else {
+          obj.position.y = origPos.y;
+        }
+      }
+    });
+  }, [gltf, exploded]);
   
-  console.log("Rendering model with", gltf.scene.children.length, "children");
+  if (!gltf?.scene) return null;
   
   return <primitive object={gltf.scene} scale={0.006} />;
 }
