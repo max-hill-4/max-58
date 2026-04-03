@@ -43,5 +43,5 @@ export default function ExplodedKeyboard({ exploded }: { exploded: boolean }) {
   
   if (!gltf?.scene) return null;
   
-  return <primitive object={gltf.scene} scale={0.02} />;
+  return <primitive object={gltf.scene} scale={0.01} />;
 }

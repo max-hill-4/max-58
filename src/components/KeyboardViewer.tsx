@@ -8,17 +8,15 @@ import ExplodedKeyboard from "./ExplodedView";
 function Scene({ exploded }: { exploded: boolean }) {
   return (
     <>
-      <ambientLight intensity={0.6} />
-      <directionalLight position={[10, 15, 10]} intensity={1.2} castShadow />
-      <directionalLight position={[-10, 10, -5]} intensity={0.6} />
-      <pointLight position={[0, 5, 0]} intensity={0.5} />
-      <Environment preset="studio" />
+      <ambientLight intensity={0.4} />
+      <directionalLight position={[5, 10, 5]} intensity={0.8} castShadow />
+      <pointLight position={[-5, 5, -5]} intensity={0.4} />
       
       <ExplodedKeyboard exploded={exploded} />
       
       <ContactShadows
         position={[0, -2, 0]}
-        opacity={0.4}
+        opacity={0.3}
         scale={30}
         blur={2}
         far={4}
@@ -32,7 +30,7 @@ export default function KeyboardViewer() {
 
   return (
     <div className="w-full h-[500px] md:h-[600px] relative">
-      <Canvas shadows camera={{ position: [0, 8, 12], fov: 45 }} className="bg-gradient-to-b from-zinc-900 to-zinc-950 rounded-xl">
+      <Canvas shadows camera={{ position: [0, 4, 8], fov: 45 }} className="bg-gradient-to-b from-zinc-900 to-zinc-950 rounded-xl">
         <Suspense fallback={null}>
           <Scene exploded={exploded} />
         </Suspense>
