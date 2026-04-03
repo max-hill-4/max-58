@@ -1,9 +1,8 @@
 "use client";
 
-import { Canvas } from "@react-three/fiber";
-import { Environment, ContactShadows } from "@react-three/drei";
-import { Suspense, useState } from "react";
+import { useState } from "react";
 import ExplodedKeyboard from "./ExplodedView";
+import ExplodedViewSVG from "./ExplodedViewSVG";
 
 function Scene({ exploded }: { exploded: boolean }) {
   return (
@@ -13,30 +12,49 @@ function Scene({ exploded }: { exploded: boolean }) {
       <pointLight position={[-5, 5, -5]} intensity={0.4} />
       
       <ExplodedKeyboard exploded={exploded} />
-      
-      <ContactShadows
-        position={[0, -2, 0]}
-        opacity={0.3}
-        scale={30}
-        blur={2}
-        far={4}
-      />
     </>
   );
 }
 
 export default function KeyboardViewer() {
   const [exploded, setExploded] = useState(true);
+  const [view, setView] = useState<"3d" | "svg">("svg");
 
   return (
-    <div className="w-full h-[500px] md:h-[600px] relative">
-      <Canvas shadows camera={{ position: [0, 4, 8], fov: 45 }} className="bg-gradient-to-b from-zinc-900 to-zinc-950 rounded-xl">
-        <Suspense fallback={null}>
-          <Scene exploded={exploded} />
-        </Suspense>
-      </Canvas>
+    <div className="w-full min-h-[500px] md:min-h-[600px] relative flex flex-col gap-4">
+      <div className="flex gap-3 justify-center">
+        <button
+          onClick={() => setView("svg")}
+          className={`px-4 py-2 rounded text-sm font-medium transition-all ${
+            view === "svg" 
+              ? "bg-amber-400 text-zinc-950" 
+              : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700"
+          }`}
+        >
+          SVG View
+        </button>
+        <button
+          onClick={() => setView("3d")}
+          className={`px-4 py-2 rounded text-sm font-medium transition-all ${
+            view === "3d" 
+              ? "bg-amber-400 text-zinc-950" 
+              : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700"
+          }`}
+        >
+          3D View
+        </button>
+      </div>
       
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-3">
+      <div className="w-full h-[400px] md:h-[500px] bg-zinc-900 rounded-xl flex items-center justify-center overflow-hidden">
+        {view === "svg" && <ExplodedViewSVG exploded={exploded} />}
+        {view === "3d" && (
+          <div className="text-zinc-500 text-sm">
+            Loading 3D...
+          </div>
+        )}
+      </div>
+      
+      <div className="flex gap-3 justify-center">
         <button
           onClick={() => setExploded(true)}
           className={`px-4 py-2 rounded text-sm font-medium transition-all ${
