@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head><title>Upload Models</title></head>
+<body style="font-family: sans-serif; padding: 40px; background: #111; color: #fff;">
+<h1>Upload 3D Models</h1>
+<form action="/api/upload" method="post" enctype="multipart/form-data" style="margin: 20px 0;">
+  <input type="file" name="files" multiple accept=".stp,.step,.stl,.obj,.glb,.gltf,.wrl" style="margin: 10px 0; display: block;">
+  <button type="submit" style="padding: 10px 20px; background: #f59e0b; border: none; color: #111; cursor: pointer;">Upload</button>
+</form>
+<div id="files"></div>
+<script>
+fetch('/api/files').then(r => r.json()).then(files => {
+  document.getElementById('files').innerHTML = '<h3>Current files:</h3>' + 
+    files.map(f => `<div>${f}</div>`).join('');
+});
+</script>
+</body>
+</html>
