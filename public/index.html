@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" data-switch="linear">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MECH·LAB | Interactive Mechanical Keyboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #13131a;
+      --border: #1e1e2e;
+      --accent: #6c63ff;
+      --accent-light: #a78bfa;
+      --accent-glow: rgba(108, 99, 255, 0.55);
+      --cap-dark: #1a1a24;
+      --cap-mid: #252535;
+      --cap-accent: rgba(90, 80, 200, 0.65);
+      --cap-transparent: rgba(200, 200, 255, 0.08);
+      --legend-primary: #d0d0e8;
+      --legend-secondary: #5555a0;
+      --legend-accent: #ffffff;
+      --stem-color: #6c63ff;
+      --switch-housing: #2a2a3e;
+      --switch-rail: #3a3a55;
+      --switch-base: #141420;
+      --pin-color: #d4a843;
+      --kbd-body: #1c1c28;
+      --kbd-border: #2e2e42;
+      --kbd-shadow: rgba(0, 0, 0, 0.7);
+      --expand-duration: 180ms;
+      --expand-easing: cubic-bezier(0.22, 1, 0.36, 1);
+      --collapse-duration: 260ms;
+      --collapse-easing: cubic-bezier(0.64, 0, 0.78, 0);
+      --expand-travel: 28px;
+      --switch-height: 22px;
+    }
+
+    [data-switch="linear"] { --stem-color: #6c63ff; }
+    [data-switch="tactile"] { --stem-color: #f59e0b; }
+    [data-switch="clicky"] { --stem-color: #10b981; }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'DM Mono', monospace;
+      background: var(--bg);
+      color: var(--legend-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(ellipse 80% 50% at 80% 20%, rgba(108, 99, 255, 0.08), transparent),
+        radial-gradient(ellipse 60% 40% at 20% 80%, rgba(167, 139, 250, 0.05), transparent);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .site-header {
+      text-align: center;
+      padding: 2rem 1rem;
+      z-index: 1;
+    }
+
+    .site-header h1 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 2.5rem;
+      background: linear-gradient(135deg, var(--accent), var(--accent-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.02em;
+    }
+
+    .site-header p {
+      color: var(--legend-secondary);
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+      letter-spacing: 0.1em;
+    }
+
+    .controls {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: center;
+      z-index: 1;
+      margin-bottom: 1rem;
+      padding: 0 1rem;
+    }
+
+    .control-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--surface);
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .control-label {
+      font-size: 0.7rem;
+      color: var(--legend-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    button {
+      font-family: inherit;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .switch-btn, .action-btn {
+      padding: 0.5rem 1rem;
+      background: var(--cap-dark);
+      color: var(--legend-primary);
+      border-radius: 4px;
+      font-size: 0.7rem;
+      letter-spacing: 0.02em;
+    }
+
+    .switch-btn:hover, .action-btn:hover {
+      background: var(--cap-mid);
+    }
+
+    .switch-btn.active {
+      background: var(--accent);
+      color: var(--bg);
+    }
+
+    .scene {
+      perspective: 1400px;
+      perspective-origin: 50% 30%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      width: 100%;
+      padding: 1rem;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .keyboard-tray {
+      transform: rotateX(28deg) rotateZ(-6deg);
+      transform-style: preserve-3d;
+      transition: transform 0.6s ease;
+    }
+
+    .keyboard-tray:hover {
+      transform: rotateX(24deg) rotateZ(-5deg) translateY(-8px);
+    }
+
+    .keyboard-body {
+      background: var(--kbd-body);
+      border: 1.5px solid var(--kbd-border);
+      border-radius: 10px;
+      padding: 14px 14px 18px;
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.04),
+        0 40px 80px var(--kbd-shadow),
+        0 12px 24px rgba(0,0,0,0.5),
+        inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+
+    .key-row {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 4px;
+    }
+
+    .key-wrapper {
+      position: relative;
+      flex-shrink: 0;
+      overflow: visible;
+      user-select: none;
+    }
+
+    .key-container {
+      position: relative;
+      width: 100%;
+      cursor: pointer;
+      transform: translateY(0);
+      transition: transform var(--expand-duration) var(--expand-easing);
+      transform-style: preserve-3d;
+    }
+
+    .key-wrapper:hover .key-container,
+    .key-wrapper[data-expanded="true"] .key-container {
+      transform: translateY(calc(-1 * var(--expand-travel)));
+    }
+
+    .keycap {
+      position: relative;
+      z-index: 3;
+      width: 100%;
+      height: 36px;
+      background: var(--cap-mid);
+      border-radius: 5px;
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.1),
+        inset 0 -2px 0 rgba(0,0,0,0.4),
+        0 2px 4px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-end;
+      padding: 4px 5px;
+      transition: box-shadow var(--expand-duration) var(--expand-easing);
+    }
+
+    .key-wrapper:hover .keycap,
+    .key-wrapper[data-expanded="true"] .keycap {
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.15),
+        inset 0 -2px 0 rgba(0,0,0,0.3),
+        0 6px 16px rgba(0,0,0,0.6),
+        0 0 12px var(--accent-glow);
+    }
+
+    .key-wrapper[data-type="accent"] .keycap {
+      background: var(--cap-accent);
+      border-color: rgba(108, 99, 255, 0.4);
+    }
+
+    .key-wrapper[data-type="transparent"] .keycap {
+      background: var(--cap-transparent);
+      border-color: rgba(150, 150, 255, 0.2);
+      backdrop-filter: blur(4px);
+    }
+
+    .key-wrapper[data-type="wide"] .keycap {
+      background: var(--cap-dark);
+    }
+
+    .key-legend {
+      font-size: 0.65rem;
+      line-height: 1;
+    }
+
+    .key-legend.primary {
+      color: var(--legend-primary);
+      font-weight: 500;
+    }
+
+    .key-legend.secondary {
+      color: var(--legend-secondary);
+      font-size: 0.45rem;
+      font-weight: 300;
+      margin-top: 1px;
+    }
+
+    .key-icon {
+      font-size: 0.8rem;
+      opacity: 0.8;
+    }
+
+    .switch-body {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%) scaleY(0);
+      transform-origin: top center;
+      width: 70%;
+      height: var(--switch-height);
+      background: var(--switch-housing);
+      border-radius: 0 0 3px 3px;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-top: none;
+      z-index: 2;
+      overflow: hidden;
+      opacity: 0;
+      transition:
+        transform var(--expand-duration) var(--expand-easing),
+        opacity var(--expand-duration) var(--expand-easing);
+    }
+
+    .key-wrapper:hover .switch-body,
+    .key-wrapper[data-expanded="true"] .switch-body {
+      transform: translateX(-50%) scaleY(1);
+      opacity: 1;
+    }
+
+    .switch-stem {
+      position: absolute;
+      top: 2px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 30%;
+      height: 60%;
+      background: var(--stem-color);
+      border-radius: 2px;
+      box-shadow: 0 0 8px var(--accent-glow);
+    }
+
+    .switch-rail {
+      position: absolute;
+      top: 10%;
+      width: 12%;
+      height: 75%;
+      background: var(--switch-rail);
+      border-radius: 1px;
+    }
+
+    .switch-rail.left { left: 10%; }
+    .switch-rail.right { right: 10%; }
+
+    .switch-base {
+      position: absolute;
+      top: calc(100% + var(--switch-height));
+      left: 50%;
+      transform: translateX(-50%) scaleY(0);
+      transform-origin: top center;
+      width: 80%;
+      height: 8px;
+      background: var(--switch-base);
+      border-radius: 0 0 2px 2px;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 0 20%;
+      opacity: 0;
+      z-index: 1;
+      transition:
+        transform var(--expand-duration) var(--expand-easing),
+        opacity var(--expand-duration) var(--expand-easing);
+      transition-delay: 20ms;
+    }
+
+    .key-wrapper:hover .switch-base,
+    .key-wrapper[data-expanded="true"] .switch-base {
+      transform: translateX(-50%) scaleY(1);
+      opacity: 1;
+    }
+
+    .pin {
+      width: 3px;
+      height: 5px;
+      background: var(--pin-color);
+      border-radius: 1px;
+      box-shadow: 0 0 4px rgba(212, 168, 67, 0.5);
+    }
+
+    .key-glow {
+      position: absolute;
+      bottom: -4px;
+      left: 10%;
+      right: 10%;
+      height: 6px;
+      background: var(--accent-glow);
+      filter: blur(8px);
+      border-radius: 50%;
+      opacity: 0;
+      transition: opacity var(--expand-duration) var(--expand-easing);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .key-wrapper:hover .key-glow,
+    .key-wrapper[data-expanded="true"] .key-glow {
+      opacity: 1;
+    }
+
+    .key-tooltip {
+      position: fixed;
+      background: rgba(19, 19, 26, 0.95);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 0.7rem;
+      color: var(--legend-primary);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      z-index: 1000;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+
+    .key-tooltip.visible {
+      opacity: 1;
+    }
+
+    .key-tooltip .tooltip-key-name {
+      display: block;
+      font-weight: 500;
+      color: var(--accent-light);
+    }
+
+    .key-tooltip .tooltip-switch-type {
+      display: block;
+      font-size: 0.6rem;
+      color: var(--legend-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 2px;
+    }
+
+    .hint {
+      text-align: center;
+      font-size: 0.7rem;
+      color: var(--legend-secondary);
+      padding: 2rem;
+      z-index: 1;
+      letter-spacing: 0.1em;
+    }
+
+    @keyframes cascade-expand {
+      0% { transform: translateY(0); }
+      40% { transform: translateY(calc(-1.4 * var(--expand-travel))); }
+      100% { transform: translateY(calc(-1 * var(--expand-travel))); }
+    }
+
+    .key-wrapper.cascade-animating .key-container {
+      animation: cascade-expand 400ms var(--expand-easing) forwards;
+    }
+
+    .keyboard-body.rgb-on .key-glow {
+      opacity: 0.6;
+      animation: rgb-cycle 4s linear infinite;
+    }
+
+    @keyframes rgb-cycle {
+      0% { background: rgba(255, 80, 80, 0.6); filter: blur(8px) hue-rotate(0deg); }
+      33% { background: rgba(80, 255, 120, 0.6); filter: blur(8px) hue-rotate(120deg); }
+      66% { background: rgba(80, 120, 255, 0.6); filter: blur(8px) hue-rotate(240deg); }
+      100% { background: rgba(255, 80, 80, 0.6); filter: blur(8px) hue-rotate(360deg); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .key-container,
+      .switch-body,
+      .switch-base,
+      .key-glow,
+      .keyboard-tray {
+        transition: none !important;
+        animation: none !important;
+      }
+    }
+
+    @media (max-width: 1200px) {
+      .scene { transform: scale(0.85); }
+    }
+
+    @media (max-width: 900px) {
+      .scene { transform: scale(0.65); }
+      .controls { flex-direction: column; }
+    }
+
+    @media (max-width: 650px) {
+      .scene { transform: scale(0.5); }
+      .site-header h1 { font-size: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <h1>MECH·LAB</h1>
+    <p>Interactive Mechanical Keyboard</p>
+  </header>
+
+  <div class="controls">
+    <div class="control-group" id="switch-selector">
+      <span class="control-label">Switch</span>
+      <button class="switch-btn active" data-switch="linear">Linear</button>
+      <button class="switch-btn" data-switch="tactile">Tactile</button>
+      <button class="switch-btn" data-switch="clicky">Clicky</button>
+    </div>
+    <div class="control-group">
+      <button class="action-btn" id="expand-all-btn">Expand All</button>
+      <button class="action-btn" id="rgb-toggle-btn">RGB</button>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="keyboard-tray">
+      <div class="keyboard-body" id="keyboard-body">
+        <div id="keyboard-root"></div>
+      </div>
+    </div>
+  </div>
+
+  <p class="hint">hover · click to lock · expand all</p>
+
+  <div class="key-tooltip" id="key-tooltip" aria-hidden="true">
+    <span class="tooltip-key-name"></span>
+    <span class="tooltip-switch-type"></span>
+  </div>
+
+  <script src="keyboard.js"></script>
+</body>
+</html>
