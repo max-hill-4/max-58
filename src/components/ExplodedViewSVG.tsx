@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import pcbData from "@/public/models/pcb-outline.json";
+import pcbData from "@/data/pcb-outline.json";
 
 export default function ExplodedViewSVG({ exploded }: { exploded: boolean }) {
   const scale = 0.15;
